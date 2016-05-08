@@ -18,7 +18,6 @@ import jopt.core.Solution;
  *          Type of solutions stored in the set
  *
  * @see DefaultSetSolutions
- * @see BiObjectiveSetSolutions
  */
 public interface SetSolutions<T extends Solution> extends Iterable<Entry<T>> {
 

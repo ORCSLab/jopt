@@ -43,10 +43,11 @@ public abstract class Algorithm<T extends Problem> {
      * @param   problem
      *          An instance of the problem to be solved
      * @param   data
-     *          A map of ({@code String} -> {@code object}) to return relevant 
-     *          data (e.g., number of iterations spent, number of function 
-     *          evaluation, etc.). This data may be accessed by who called a 
-     *          solving method.
+     *          A map of {@code String} to {@code object} used for returning 
+     *          relevant data (e.g., number of iterations spent, number of 
+     *          function evaluation, etc.). This data may be accessed by who 
+     *          called {@link #solve(jopt.core.Problem, java.util.Map) solve} 
+     *          method.
      * 
      * @return  A set of candidate solutions for the instance of the problem 
      *          specified
@@ -102,10 +103,11 @@ public abstract class Algorithm<T extends Problem> {
      * @param   problem
      *          An instance of the problem to be solved
      * @param   data
-     *          A map of ({@code String} -> {@code object}) to return relevant 
-     *          data (e.g., number of iterations spent, number of function 
-     *          evaluation, etc.). This data may be accessed by who called a 
-     *          solving method.
+     *          A map of {@code String} to {@code object} used for returning 
+     *          relevant data (e.g., number of iterations spent, number of 
+     *          function evaluation, etc.). This data may be accessed by who 
+     *          called {@link #solve(jopt.core.Problem, java.util.Map) solve} 
+     *          method.
      * 
      * @return  A set of candidate solutions for the instance of the problem 
      *          specified

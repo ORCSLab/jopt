@@ -14,6 +14,7 @@ import jopt.core.Loader;
 import jopt.core.Problem;
 import jopt.core.Solution;
 import jopt.core.sets.SetSolutions;
+import jopt.runner.builders.SimpleRunnerBuilder;
 import lombok.NonNull;
 import lombok.Synchronized;
 

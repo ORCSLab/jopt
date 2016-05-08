@@ -161,6 +161,7 @@ public abstract class Problem {
      * 
      * @param   solution
      *          A candidate solution for this problem
+     * 
      * @throws  NullPointerException
      *          If the {@code solution} is a null reference
      * @throws  FeasibilityException 
@@ -175,6 +176,7 @@ public abstract class Problem {
      * problem, {@code false} otherwise.
      * 
      * @param   solution
+     *          A solution for this problem
      * 
      * @return  {@code true} if {@code solution} is a feasible solution for this 
      *          problem, {@code false} otherwise.

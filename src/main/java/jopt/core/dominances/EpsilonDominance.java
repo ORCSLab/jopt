@@ -1,5 +1,6 @@
 package jopt.core.dominances;
 
+import jopt.core.utils.NumberComparator;
 import jopt.exceptions.DimensionException;
 import lombok.NonNull;
 
@@ -11,16 +12,16 @@ import lombok.NonNull;
  * <p>
  * Given <b>x<sub>1</sub></b>, <b>x<sub>2</sub></b> and <b>&epsilon;</b> three 
  * vectors of same length, equal to n. We say that <b>x<sub>1</sub></b> 
- * &epsilon;-dominates <b>x<sub>2</sub></b> if and only if
- * <b>x<sub>1,i</sub></b> - &epsilon;<sub>i</sub> &le; <b>x<sub>2,i</sub></b>, 
- * for all i = 0, ..., n-1 and &epsilon;<sub>i</sub> > 0 we have.
+ * &epsilon;-dominates <b>x<sub>2</sub></b> if and only if &epsilon;<sub>i</sub> &gt; 0 
+ * and <b>x<sub>1,i</sub></b> - &epsilon;<sub>i</sub> &le; <b>x<sub>2,i</sub></b>, 
+ * for all i = 0, ..., n-1.
  * 
  * <p>
  * If <b>x<sub>1</sub></b> and <b>x<sub>2</sub></b> are indifferent regarding to 
  * &epsilon;-dominance, then Pareto-dominance is used.
  */
 public final class EpsilonDominance implements Dominance {
-
+    
     private final double[] epsilon;
     private final ParetoDominance paretoDominance;
 

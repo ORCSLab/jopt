@@ -34,8 +34,11 @@ public abstract class Algorithm<T extends Problem> {
      * 
      * @return  {@code true} if the the value for the parameter has been 
      *          successfully assigned, {@code false} otherwise
+     * 
+     * @throws  Exception
+     *          If any error occurred
      */
-    protected abstract boolean doSetParameter(String name, Object value);
+    protected abstract boolean doSetParameter(String name, Object value) throws Exception;
     
     /**
      * Solve an instance of the problem.

@@ -16,6 +16,7 @@ import jopt.exceptions.FeasibilityException;
 import jopt.core.sets.SetSolutions;
 import jopt.runner.Entry;
 import jopt.runner.Runner;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**
  * Listener that writes a complete and detailed report of results obtained by 
@@ -379,6 +380,7 @@ public class ComprehensiveReport implements RunnerListener {
             section4.append("   4.1. ELAPSED TIME (IN SECONDS): ").append(section4_elapsedTime).append("\n");
             section4.append("   4.2. CLASS: ").append(section4_class).append("\n");
             section4.append("   4.3. MESSAGE: ").append(section4_message).append("\n");
+            section4.append("   4.4. STACK TRACE: \n\n").append(ExceptionUtils.getStackTrace(error)).append("\n");
             section4.append("\n\n");
         }
         

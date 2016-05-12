@@ -2,17 +2,19 @@
 
 ## 1. About
 
-jOpt is a Java Framework for reducing work and time spent while developing optimization algorithms and performing computational experiments.
+jOpt is a Java Framework for reducing work and time spent while developing optimization algorithms and performing computational experiments. It is written using Java 8 programming language, so codes that depend on jOpt Framework needs JDK 8 and JRE 8 for compiling and running.
 
 ## 2. Download ##
 
 ### 2.1. Binary
 
 To use jOpt Framework from the compiled .jar file, first you have to download it and its dependencies:
-* [jopt-1.0.0.jar](https://github.com/andremaravilha/jopt/releases/download/1.0.0/jopt-1.0.0.jar)
-* [dependency.tar.gz](https://github.com/andremaravilha/jopt/releases/download/1.0.0/dependency.tar.gz)
+* [jopt-1.0.1.jar](https://github.com/andremaravilha/jopt/releases/download/1.0.1/jopt-1.0.1.jar)
+* [dependency.zip](https://github.com/andremaravilha/jopt/releases/download/1.0.1/dependency.zip) or [dependency.tar.gz](https://github.com/andremaravilha/jopt/releases/download/1.0.1/dependency.tar.gz)
 
-After download, you have to extract **dependency.tar.gz** and add **jopt-1.0.0.jar** and the dependencies on the classpath.
+After download, you have to extract **dependency.zip** (or **dependency.tar.gz**) and add **jopt-1.0.0.jar** and the dependencies on the classpath.
+
+You may prefer to use just [jopt-1.0.1-dist.jar](https://github.com/andremaravilha/jopt/releases/download/1.0.1/jopt-1.0.1-dist.jar), which already includes all dependencies.
 
 ### 2.2. Maven
 
@@ -30,7 +32,7 @@ You can use jOpt Framework with Maven by adding the following to your **pom.xml*
   <dependency>
     <groupId>com.github.andremaravilha</groupId>
     <artifactId>jopt</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </dependency>
 </dependencies>
 ```
@@ -52,6 +54,6 @@ Then, add the dependency:
 
 ```
 dependencies {
-  compile 'com.github.andremaravilha:jopt:1.0.0'
+  compile 'com.github.andremaravilha:jopt:1.0.1'
 }
 ```

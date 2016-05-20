@@ -76,12 +76,10 @@ public abstract class Algorithm<T extends Problem> {
      */
     public boolean setParameter(@NonNull String name, Object value) throws NullPointerException {
         try {
-            doSetParameter(name, value);
+            return doSetParameter(name, value);
         } catch (Throwable e) {
             return false;
         }
-        
-        return true;
     }
     
     /**

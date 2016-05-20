@@ -41,6 +41,8 @@ public abstract class FileLoader implements Loader {
      *
      * @param   attributes
      *          A map where the attributes (pairs string/object) must be stored
+     * @param   parameters
+     *          An unmodifiable map with parameters for this loader
      * @param   paths
      *          the paths of files with data of the instance to be loaded. More
      *          than one path (separated by commas or an array of paths) can be
@@ -49,7 +51,8 @@ public abstract class FileLoader implements Loader {
      * @throws  IOException
      *          if any problem occurs while reading the files
      */
-    protected abstract void doRead(Map<String, Object> attributes, Path... paths) throws IOException;
+    protected abstract void doRead(Map<String, Object> attributes, 
+            Map<String, Object> parameters, Path... paths) throws IOException;
     
     /**
      * Read data from files.
@@ -67,7 +70,30 @@ public abstract class FileLoader implements Loader {
      *          if some file can not be read
      */
     public final void read(@NonNull Path... paths) throws
-            IllegalArgumentException, PathNotFoundException, IOException {
+            NullPointerException, PathNotFoundException, IOException {
+        read(null, paths);
+    }
+    
+    /**
+     * Read data from files.
+     *
+     * @param   parameters
+     *          An map with parameters for this loader (it may be {@code null} 
+     *          if there is no parameter for the loader)
+     * @param   paths
+     *          the paths of files with data of the instance to be loaded. More
+     *          than one path (separated by commas or an array of paths) can be
+     *          passed
+     *
+     * @throws  NullPointerException
+     *          if some path is null
+     * @throws  PathNotFoundException
+     *          if some path does not exists
+     * @throws  IOException
+     *          if some file can not be read
+     */
+    public final void read(Map<String, Object> parameters, @NonNull Path... paths) throws
+            NullPointerException, PathNotFoundException, IOException {
 
         // Check paths
         for (@NonNull Path p : paths) {
@@ -80,7 +106,7 @@ public abstract class FileLoader implements Loader {
         attributes = new HashMap<>();
         
         // Read files and store the attributes on the map
-        doRead(attributes, paths);
+        doRead(attributes, Collections.unmodifiableMap(parameters), paths);
     }
 
     @Override

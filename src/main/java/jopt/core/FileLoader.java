@@ -72,7 +72,7 @@ public abstract class FileLoader implements Loader {
      */
     public final void read(@NonNull Path... paths) throws
             NullPointerException, PathNotFoundException, IOException {
-        read(null, paths);
+        read(Collections.EMPTY_MAP, paths);
     }
     
     /**

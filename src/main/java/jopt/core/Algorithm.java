@@ -1,9 +1,12 @@
 package jopt.core;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import jopt.core.annotations.Parameter;
 import jopt.core.sets.SetSolutions;
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Abstract class by all algorithms for optimization problem. An algorithm is 
@@ -15,11 +18,50 @@ import lombok.NonNull;
 public abstract class Algorithm<T extends Problem> {
     
     /**
+     * Set of fields defined as parameters used to setup the algorithm.
+     */
+    private Map<String, Field> parameters;
+    
+    /**
      * Sole constructor.
      */
     protected Algorithm() {
-        // It does nothing
+        
+        // Get all fields of the algorithm
+        Field[] fields = this.getClass().getDeclaredFields();
+
+        // Get the fields annotated as algorithm's parameter
+        parameters = new HashMap<>();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Parameter.class)) {
+                field.setAccessible(true);
+                Parameter annotation = field.getAnnotation(Parameter.class);
+                String value = StringUtils.trim(annotation.value());
+                if (StringUtils.isBlank(value)) {
+                    parameters.put(field.getName(), field);
+                } else {
+                    parameters.put(value, field);
+                }
+            }
+        }
     }
+    
+    /**
+     * Solve an instance of the problem.
+     * 
+     * @param   problem
+     *          An instance of the problem to be solved
+     * @param   data
+     *          A map of {@code String} to {@code object} used for returning 
+     *          relevant data (e.g., number of iterations spent, number of 
+     *          function evaluation, etc.). This data may be accessed by who 
+     *          called {@link #solve(jopt.core.Problem, java.util.Map) solve} 
+     *          method.
+     * 
+     * @return  A set of candidate solutions for the instance of the problem 
+     *          specified
+     */
+    protected abstract SetSolutions<? extends Solution> doSolve(T problem, Map<String, Object> data);
     
     /**
      * Set this algorithm's parameters. If the specified value for a parameter 
@@ -38,24 +80,51 @@ public abstract class Algorithm<T extends Problem> {
      * @throws  Exception
      *          If any error occurred
      */
-    protected abstract boolean doSetParameter(String name, Object value) throws Exception;
-    
-    /**
-     * Solve an instance of the problem.
-     * 
-     * @param   problem
-     *          An instance of the problem to be solved
-     * @param   data
-     *          A map of {@code String} to {@code object} used for returning 
-     *          relevant data (e.g., number of iterations spent, number of 
-     *          function evaluation, etc.). This data may be accessed by who 
-     *          called {@link #solve(jopt.core.Problem, java.util.Map) solve} 
-     *          method.
-     * 
-     * @return  A set of candidate solutions for the instance of the problem 
-     *          specified
-     */
-    protected abstract SetSolutions<? extends Solution> doSolve(T problem, Map<String, Object> data);
+    protected boolean doSetParameter(String name, Object value) throws Exception {
+        try {
+            
+            // Check if there is any parameter with the name
+            if (parameters.containsKey(name)) {
+                Field field = parameters.get(name);
+                
+                // If the field is a Number class, get the correct type
+                if (Number.class.isInstance(value)) {
+                    Number number = (Number) value;
+                    Class type = field.getType();
+                    if (type.isAssignableFrom(Double.class) || type.isAssignableFrom(double.class)) {
+                        field.set(this, number.doubleValue());
+                    } else if (type.isAssignableFrom(Float.class) || type.isAssignableFrom(float.class)) {
+                        field.set(this, number.floatValue());
+                    } else if (type.isAssignableFrom(Long.class) || type.isAssignableFrom(long.class)) {
+                        field.set(this, number.longValue());
+                    } else if (type.isAssignableFrom(Integer.class) || type.isAssignableFrom(int.class)) {
+                        field.set(this, number.intValue());
+                    } else if (type.isAssignableFrom(Short.class) || type.isAssignableFrom(short.class)) {
+                        field.set(this, number.shortValue());
+                    } else if (type.isAssignableFrom(Byte.class) || type.isAssignableFrom(byte.class)) {
+                        field.set(this, number.byteValue());
+                    } else {
+                        field.set(this, number);
+                    }
+                    
+                // Other types, just try to set
+                } else {
+                    field.set(this, value);
+                }
+
+                // Success
+                return true;
+                
+            }
+            
+        } catch (Exception e) {
+            // Do nothing.
+            //e.printStackTrace();
+        }
+        
+        // Failed to set the parameter
+        return false;
+    }
     
     /**
      * Set this algorithm's parameters. If the specified value for a parameter 

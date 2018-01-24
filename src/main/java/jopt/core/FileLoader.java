@@ -25,7 +25,7 @@ public abstract class FileLoader implements Loader {
     /**
      * Map that keeps the pairs (key/attribute) of the loader.
      */
-    private Map<String, Object> attributes;
+    private Map<String, Object> data;
     
     /**
      * Sole constructor.
@@ -39,8 +39,11 @@ public abstract class FileLoader implements Loader {
      * with the attributes. This method must return a mapping of key/value with 
      * the data of the input files.
      *
-     * @param   attributes
-     *          A map where the attributes (pairs string/object) must be stored
+     * @param   data
+     *          A map where the data (pairs of string/object) used to load 
+     *          problems must be stored
+     * @param   parameters
+     *          An unmodifiable map with parameters for this loader
      * @param   paths
      *          the paths of files with data of the instance to be loaded. More
      *          than one path (separated by commas or an array of paths) can be
@@ -49,7 +52,8 @@ public abstract class FileLoader implements Loader {
      * @throws  IOException
      *          if any problem occurs while reading the files
      */
-    protected abstract void doRead(Map<String, Object> attributes, Path... paths) throws IOException;
+    protected abstract void doRead(Map<String, Object> data, 
+            Map<String, Object> parameters, Path... paths) throws IOException;
     
     /**
      * Read data from files.
@@ -67,7 +71,30 @@ public abstract class FileLoader implements Loader {
      *          if some file can not be read
      */
     public final void read(@NonNull Path... paths) throws
-            IllegalArgumentException, PathNotFoundException, IOException {
+            NullPointerException, PathNotFoundException, IOException {
+        read(Collections.EMPTY_MAP, paths);
+    }
+    
+    /**
+     * Read data from files.
+     *
+     * @param   parameters
+     *          An map with parameters for this loader (it may be {@code null} 
+     *          if there is no parameter for the loader)
+     * @param   paths
+     *          the paths of files with data of the instance to be loaded. More
+     *          than one path (separated by commas or an array of paths) can be
+     *          passed
+     *
+     * @throws  NullPointerException
+     *          if some path is null
+     * @throws  PathNotFoundException
+     *          if some path does not exists
+     * @throws  IOException
+     *          if some file can not be read
+     */
+    public final void read(Map<String, Object> parameters, @NonNull Path... paths) throws
+            NullPointerException, PathNotFoundException, IOException {
 
         // Check paths
         for (@NonNull Path p : paths) {
@@ -76,40 +103,40 @@ public abstract class FileLoader implements Loader {
             }
         }
         
-        // Initialize the map to store the attributes
-        attributes = new HashMap<>();
+        // Initialize the map to store the data
+        data = new HashMap<>();
         
         // Read files and store the attributes on the map
-        doRead(attributes, paths);
+        doRead(data, Collections.unmodifiableMap(parameters), paths);
     }
 
     @Override
     public Object get(@NonNull String key) {
-        if (attributes == null || !attributes.containsKey(key)) {
+        if (data == null || !data.containsKey(key)) {
             String msg = String.format("There is no attribute represented by the key \"%s\"", key);
             throw new AttributeNotFoundException(msg);
         }
-        return attributes.get(key);
+        return data.get(key);
     }
     
     @Override
     public Object get(String key, Object defaultValue) {
-        if (attributes == null || !attributes.containsKey(key)) {
+        if (data == null || !data.containsKey(key)) {
             return defaultValue;
         }
-        return attributes.get(key);
+        return data.get(key);
     }
 
     @Override
     public boolean contains(String key) {
-        return (attributes != null && attributes.containsKey(key));
+        return (data != null && data.containsKey(key));
     }
 
     @Override
     public Set<String> getKeys() {
-        return (attributes == null ? 
+        return (data == null ? 
                 Collections.emptySet() :
-                Collections.unmodifiableSet(attributes.keySet()));
+                Collections.unmodifiableSet(data.keySet()));
     }
     
 }
